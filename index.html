@@ -338,19 +338,38 @@
       byId("qrcode").innerHTML = "";
 
       try {
-        drawDemoMatrixCode(byId("qrcode"), currentPayload);
+        drawRealQrCodeOnline(byId("qrcode"), currentPayload);
         byId("statusMessage").innerHTML =
-          '<div class="warning">' +
-          'Demo-Anzeige ohne externe Bibliothek. Für echten SonoScape-Scan muss in der finalen Version eine lokal eingebundene echte QR-Bibliothek verwendet werden. Der Text darunter ist der verbindliche Inhalt.' +
+          '<div class="success">' +
+          'Echter QR-Code für den Live-Test. Hinweis: Diese Variante nutzt online einen kostenlosen QR-Bilddienst. Für die endgültige Praxisversion wird der QR-Generator lokal eingebunden, damit es vollständig offline läuft.' +
           '</div>';
       } catch (error) {
         byId("statusMessage").innerHTML =
-          '<div class="errorBox">QR-Anzeige konnte nicht erzeugt werden.<br>Fehler: ' +
+          '<div class="errorBox">QR-Code konnte nicht erzeugt werden.<br>Fehler: ' +
           escapeHtml(error && error.message ? error.message : String(error)) +
           '</div>';
       }
 
       byId("qrView").classList.add("active");
+    }
+
+    function drawRealQrCodeOnline(container, text) {
+      const image = document.createElement("img");
+      image.alt = "QR-Code";
+      image.width = 300;
+      image.height = 300;
+      image.style.background = "white";
+      image.style.padding = "12px";
+      image.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)";
+      image.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&ecc=M&data=" + encodeURIComponent(String(text || ""));
+      image.onerror = function () {
+        container.innerHTML = "";
+        const box = document.createElement("div");
+        box.className = "errorBox";
+        box.textContent = "Online-QR-Dienst konnte nicht geladen werden. Internetverbindung prüfen oder finale Offline-Version mit lokaler QR-Bibliothek verwenden.";
+        container.appendChild(box);
+      };
+      container.appendChild(image);
     }
 
     function drawDemoMatrixCode(container, text) {
