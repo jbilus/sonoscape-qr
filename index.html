@@ -259,10 +259,18 @@
     }
 
     function makePayload(item) {
-      return "Beschreibung:\n" +
-        String(item.de || "") + "\n" +
-        String(item.beschreibung || "") + "\n\n" +
-        "Untersucher:\n" + untersucher;
+      const lines = [];
+      lines.push("Beschreibung:");
+      if (item.de) lines.push(String(item.de));
+      if (item.beschreibung) lines.push(String(item.beschreibung));
+      if (item.indication) lines.push("Indikation: " + String(item.indication));
+      if (item.patient_position) lines.push("Lagerung: " + String(item.patient_position));
+      if (item.sonde) lines.push("Sonde: " + String(item.sonde));
+      if (item.guidance) lines.push("Guidance: " + String(item.guidance));
+      lines.push("");
+      lines.push("Untersucher:");
+      lines.push(untersucher);
+      return lines.join("\n");
     }
 
     function getRegions() {
@@ -291,13 +299,7 @@
     function getFilteredItems(query, region) {
       const q = normalize(query);
       return items.filter(item => {
-        const haystack = normalize([
-          item.region,
-          item.code,
-          item.en,
-          item.de,
-          item.beschreibung
-        ].join(" "));
+        const haystack = normalize(Object.values(item).join(" "));
         return (!region || item.region === region) && (!q || haystack.includes(q));
       });
     }
@@ -324,7 +326,8 @@
         card.innerHTML =
           '<div class="region">' + escapeHtml(item.region) + ' · ' + escapeHtml(item.code) + '</div>' +
           '<div class="title">' + escapeHtml(item.de) + '</div>' +
-          '<div class="subtitle">' + escapeHtml(item.en) + '</div>';
+          '<div class="subtitle">' + escapeHtml(item.en) + '</div>' +
+          '<div class="subtitle">' + escapeHtml([item.category, item.guidance, item.indication].filter(Boolean).join(' · ')) + '</div>';
         card.addEventListener("click", () => showQr(item));
         results.appendChild(card);
       });
@@ -481,7 +484,7 @@
         localStorage.setItem("sono_items", JSON.stringify(items));
         render();
         runTests();
-        showMessage("Liste erfolgreich aktualisiert: " + items.length + " Einträge.", "success");
+        showMessage("Liste erfolgreich aktualisiert: " + items.length + " Einträge. Stand: " + new Date().toLocaleString("de-DE"), "success");
       } catch (error) {
         showMessage("Fehler beim Aktualisieren: " + (error && error.message ? error.message : String(error)), "error");
       }
@@ -531,7 +534,17 @@
           code: getCsvValue(headers, cols, "code"),
           en: getCsvValue(headers, cols, "en"),
           de: getCsvValue(headers, cols, "de"),
-          beschreibung: getCsvValue(headers, cols, "beschreibung")
+          beschreibung: getCsvValue(headers, cols, "beschreibung"),
+          category: getCsvValue(headers, cols, "category"),
+          indication: getCsvValue(headers, cols, "indication"),
+          patient_position: getCsvValue(headers, cols, "patient_position"),
+          sonde: getCsvValue(headers, cols, "sonde"),
+          needle: getCsvValue(headers, cols, "needle"),
+          medicament: getCsvValue(headers, cols, "medicament"),
+          landmarks: getCsvValue(headers, cols, "landmarks"),
+          needle_direction: getCsvValue(headers, cols, "needle_direction"),
+          guidance: getCsvValue(headers, cols, "guidance"),
+          tags: getCsvValue(headers, cols, "tags")
         };
       }).filter(item => item.region || item.code || item.en || item.de || item.beschreibung);
     }
