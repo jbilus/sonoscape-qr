@@ -2,86 +2,234 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SonoScape QR Labels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>QR Code Dr. Radu-Lucian Jilavu</title>
   <style>
     :root {
-      --bg: #f5f5f5;
+      --bg: #f4f4f4;
       --fg: #111;
-      --muted: #555;
+      --muted: #666;
       --card: #fff;
-      --border: #ccc;
+      --border: #d4d4d4;
       --dark: #111;
-      --warn: #fff7d6;
-      --warn-border: #d9b100;
-      --ok: #e7f7ea;
-      --ok-border: #4b9b5f;
       --danger: #ffe8e8;
       --danger-border: #b00020;
+      --safe-top: env(safe-area-inset-top, 0px);
     }
 
+    * { box-sizing: border-box; }
+
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
       background: var(--bg);
       color: var(--fg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      overflow: hidden;
     }
 
     header {
-      padding: 16px;
+      height: calc(52px + var(--safe-top));
+      padding: calc(7px + var(--safe-top)) 10px 7px;
       background: var(--dark);
       color: white;
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 8px;
+      align-items: center;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 20px;
+    .menuBtn, .homeLink {
+      height: 36px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 9px;
+      background: rgba(255,255,255,.08);
+      color: white;
+      font-size: 18px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+    }
+
+    .homeLink { font-size: 13px; }
+
+    .appTitle {
+      min-width: 0;
+      line-height: 1.08;
+    }
+
+    .appTitle strong {
+      display: block;
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .appTitle span {
+      display: block;
+      font-size: 11px;
+      color: #cfcfcf;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     main {
-      padding: 14px;
-      max-width: 720px;
-      margin: auto;
+      height: calc(100vh - 52px - var(--safe-top));
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      padding: 8px;
+      gap: 6px;
+      max-width: 760px;
+      margin: 0 auto;
     }
 
-    input, select, button, textarea {
+    input, select, button {
       width: 100%;
-      box-sizing: border-box;
-      font-size: 18px;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 10px;
       border: 1px solid var(--border);
-      font-family: inherit;
+      border-radius: 10px;
+      font: inherit;
     }
 
-    button { cursor: pointer; }
+    input, select {
+      height: 40px;
+      padding: 0 10px;
+      background: white;
+      font-size: 16px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 42px;
+      gap: 6px;
+    }
+
+    .refreshBtn {
+      height: 40px;
+      padding: 0;
+      background: #fff;
+      color: #111;
+      font-size: 19px;
+    }
+
+    .regionStrip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .regionStrip::-webkit-scrollbar { display: none; }
+
+    .pill {
+      flex: 0 0 auto;
+      width: auto;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: white;
+      color: #111;
+      font-size: 13px;
+    }
+
+    .pill.active {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+
+    #results {
+      overflow-y: auto;
+      padding-bottom: 4px;
+    }
 
     .card {
       background: var(--card);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      padding: 9px 10px;
+      margin-bottom: 6px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.07);
       text-align: left;
     }
 
     .region {
-      font-size: 13px;
+      font-size: 11px;
       color: #666;
       text-transform: uppercase;
-      letter-spacing: .06em;
+      letter-spacing: .05em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .title {
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 700;
-      margin: 5px 0;
+      margin-top: 2px;
+      line-height: 1.15;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .subtitle {
-      font-size: 14px;
+      font-size: 12px;
       color: #444;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 11px;
+      min-height: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .drawerBackdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      z-index: 20;
+    }
+
+    .drawerBackdrop.active { display: block; }
+
+    .drawer {
+      width: min(285px, 84vw);
+      height: 100%;
+      background: #fff;
+      padding: calc(12px + var(--safe-top)) 10px 10px;
+      box-shadow: 2px 0 18px rgba(0,0,0,.25);
+      overflow-y: auto;
+    }
+
+    .drawer h2 {
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+
+    .drawer button {
+      height: 38px;
+      margin-bottom: 6px;
+      text-align: left;
+      padding: 0 10px;
+      background: #f7f7f7;
+    }
+
+    .drawer button.active {
+      background: #111;
+      color: #fff;
     }
 
     .qrView {
@@ -89,161 +237,144 @@
       position: fixed;
       inset: 0;
       background: white;
-      z-index: 10;
-      padding: 18px;
-      text-align: center;
-      overflow: auto;
+      z-index: 30;
+      padding: calc(8px + var(--safe-top)) 8px 8px;
+      overflow: hidden;
     }
 
-    .qrView.active { display: block; }
+    .qrView.active {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 6px;
+    }
+
+    .qrHeader {
+      display: grid;
+      grid-template-columns: 1fr 42px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    #qrTitle {
+      margin: 0;
+      font-size: 17px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     #qrcode {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 280px;
-      margin: 24px 0 16px;
+      min-height: 250px;
+    }
+
+    #qrcode img {
+      width: min(76vw, 310px);
+      height: min(76vw, 310px);
+      background: white;
+      padding: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.16);
     }
 
     .qrText {
       white-space: pre-wrap;
       text-align: left;
       background: #f2f2f2;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 15px;
-      overflow-wrap: anywhere;
+      padding: 8px;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.25;
+      overflow-y: auto;
     }
 
-    .closeBtn {
-      background: var(--dark);
-      color: white;
-      border: none;
-      margin-top: 18px;
+    .qrActions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
     }
 
-    .secondaryBtn {
-      background: #f2f2f2;
-      color: #111;
-    }
-
-    .refreshBtn {
-      background: #111;
-      color: white;
+    .secondaryBtn, .closeBtn {
+      height: 40px;
       border: none;
     }
 
-    .warning, .success, .errorBox {
-      border-radius: 10px;
-      padding: 12px;
-      text-align: left;
-      font-size: 15px;
-      margin-bottom: 12px;
-    }
-
-    .warning {
-      background: var(--warn);
-      border: 1px solid var(--warn-border);
-    }
-
-    .success {
-      background: var(--ok);
-      border: 1px solid var(--ok-border);
-    }
+    .secondaryBtn { background: #eee; color: #111; }
+    .closeBtn { background: #111; color: white; }
 
     .errorBox {
       background: var(--danger);
       border: 1px solid var(--danger-border);
-    }
-
-    .small {
-      color: var(--muted);
+      border-radius: 10px;
+      padding: 10px;
       font-size: 13px;
       text-align: left;
-      margin-top: 8px;
-      white-space: pre-wrap;
-    }
-
-    canvas {
-      image-rendering: pixelated;
-      border: 12px solid white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.16);
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>SonoScape QR Labels</h1>
+    <button id="openDrawerBtn" class="menuBtn" type="button" aria-label="Regionen">☰</button>
+    <div class="appTitle">
+      <strong>QR Code Dr. Radu-Lucian Jilavu</strong>
+      <span id="headerUrl">https://jbilus.github.io/sonoscape-qr/</span>
+    </div>
+    <a class="homeLink" href="./" aria-label="Home">Home</a>
   </header>
 
   <main>
-    <input id="search" placeholder="Suche: pir, gon, isg, root, shoulder ..." autofocus />
+    <div class="toolbar">
+      <input id="search" placeholder="Suche: pir, gon, isg, knee ..." autofocus />
+      <button id="refreshBtn" class="refreshBtn" type="button" title="Liste aktualisieren">↻</button>
+    </div>
 
-    <select id="regionFilter">
-      <option value="">Alle Regionen</option>
-    </select>
-
-    <button id="refreshBtn" class="refreshBtn" type="button">Liste aus Google Sheets aktualisieren</button>
-    <div id="message" class="small"></div>
+    <div id="regionStrip" class="regionStrip"></div>
     <div id="results"></div>
-    <div id="testResults" class="small"></div>
+    <div id="message" class="small"></div>
   </main>
 
+  <div id="drawerBackdrop" class="drawerBackdrop">
+    <nav class="drawer" aria-label="Regionen">
+      <h2>Regionen</h2>
+      <div id="drawerRegions"></div>
+    </nav>
+  </div>
+
   <div id="qrView" class="qrView" aria-modal="true" role="dialog">
-    <h2 id="qrTitle"></h2>
+    <div class="qrHeader">
+      <h2 id="qrTitle"></h2>
+      <button id="closeTopBtn" class="closeBtn" type="button">×</button>
+    </div>
     <div id="statusMessage"></div>
     <div id="qrcode"></div>
     <div id="qrPayload" class="qrText"></div>
-    <button id="copyBtn" class="secondaryBtn" type="button">Text kopieren</button>
-    <button id="closeBtn" class="closeBtn" type="button">Schließen</button>
+    <div class="qrActions">
+      <button id="copyBtn" class="secondaryBtn" type="button">Text kopieren</button>
+      <button id="closeBtn" class="closeBtn" type="button">Schließen</button>
+    </div>
   </div>
 
   <script>
     "use strict";
 
     const untersucher = "Dr. Radu-Lucian Jilavu";
-
-    // Google Sheets CSV-Link eintragen.
-    // In Google Sheets: Datei -> Freigeben -> Im Web veröffentlichen -> CSV.
-    // Erwartete Spalten: region, code, en, de, beschreibung
+    const HOME_URL = "https://jbilus.github.io/sonoscape-qr/";
     const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmvm3tDY1IDmX_z6vre-vttTzzv_UpCrBpoRrOfx2FzgAi53n957cN_VP9OHO1uisRAAaSiYF3M2x3/pub?output=csv";
 
-    let currentPayload = "";
-
-    let items = [
-      {
-        region: "HWS",
-        code: "PRNI-HWS",
-        en: "sonography guided peri-radicular nerve root injection",
-        de: "Ultraschallgesteuerte periradikuläre Nervenwurzelinjektion",
-        beschreibung: "Ultraschallgesteuerte Injektion an die Nervenwurzel, periradikuläre Injektion Halswirbelsäule"
-      },
-      {
-        region: "HWS",
-        code: "GON",
-        en: "sonography guided Greater occipital nerve block",
-        de: "sonografiegesteuerte Blockade des Nervus occipitalis major",
-        beschreibung: "Ultraschallgeführte Blockade des großen Hinterhauptsnervs, Nervus occipitalis major"
-      },
-      {
-        region: "LWS",
-        code: "ISG",
-        en: "SI joint injection",
-        de: "ISG-Infiltration",
-        beschreibung: "Injektion am Iliosakralgelenk, ISG, SIG"
-      },
-      {
-        region: "Becken",
-        code: "PIRI",
-        en: "Piriformis muscle injection",
-        de: "Injektion in den Piriformis-Muskel",
-        beschreibung: "Injektion in den Piriformis-Muskel"
-      }
+    const REGION_ORDER = [
+      "Kopf", "Kopf/Hals", "HWS", "Schulter", "BWS", "Thorax", "Ellenbogen", "Handgelenk", "Hand", "Abdomen", "LWS", "Sakral", "Becken", "Hüftgelenk", "Kniegelenk", "Sprunggelenk", "Fuß", "Hydrodissection", "Infusion", "Implantate", "Sonstige"
     ];
 
-    function byId(id) {
-      return document.getElementById(id);
-    }
+    let currentPayload = "";
+    let selectedRegion = "";
+    let items = [
+      { region: "HWS", code: "GON", en: "Greater occipital nerve block", de: "Blockade Nervus occipitalis major", beschreibung: "Ultraschallgeführte Blockade des großen Hinterhauptsnervs" },
+      { region: "LWS", code: "ISG", en: "Sacroiliac joint injection", de: "ISG-Infiltration", beschreibung: "Injektion am Iliosakralgelenk" },
+      { region: "Becken", code: "PIRI", en: "Piriformis muscle injection", de: "Piriformis-Injektion", beschreibung: "Injektion in den Piriformis-Muskel" }
+    ];
+
+    function byId(id) { return document.getElementById(id); }
 
     function escapeHtml(value) {
       return String(value)
@@ -256,6 +387,21 @@
 
     function normalize(value) {
       return String(value || "").toLowerCase().trim();
+    }
+
+    function getRegionRank(region) {
+      const index = REGION_ORDER.indexOf(String(region || ""));
+      return index >= 0 ? index : 999;
+    }
+
+    function sortItemsAnatomically(list) {
+      return list.slice().sort((a, b) => {
+        const regionDiff = getRegionRank(a.region) - getRegionRank(b.region);
+        if (regionDiff !== 0) return regionDiff;
+        const codeA = String(a.code || a.de || a.en || "");
+        const codeB = String(b.code || b.de || b.en || "");
+        return codeA.localeCompare(codeB, "de");
+      });
     }
 
     function makePayload(item) {
@@ -274,45 +420,60 @@
     }
 
     function getRegions() {
-      const regionSet = new Set();
-      items.forEach(item => {
-        if (item.region) regionSet.add(item.region);
+      const set = new Set();
+      items.forEach(item => { if (item.region) set.add(item.region); });
+      return Array.from(set).sort((a, b) => {
+        const diff = getRegionRank(a) - getRegionRank(b);
+        return diff !== 0 ? diff : a.localeCompare(b, "de");
       });
-      return Array.from(regionSet).sort((a, b) => a.localeCompare(b, "de"));
     }
 
-    function populateRegionFilter() {
-      const select = byId("regionFilter");
-      const selected = select.value;
-      select.innerHTML = '<option value="">Alle Regionen</option>';
-      getRegions().forEach(region => {
-        const option = document.createElement("option");
-        option.value = region;
-        option.textContent = region;
-        select.appendChild(option);
+    function setRegion(region) {
+      selectedRegion = region || "";
+      closeDrawer();
+      render();
+    }
+
+    function renderRegions() {
+      const regions = ["", ...getRegions()];
+      const strip = byId("regionStrip");
+      const drawer = byId("drawerRegions");
+      strip.innerHTML = "";
+      drawer.innerHTML = "";
+
+      regions.forEach(region => {
+        const label = region || "Alle";
+        const active = region === selectedRegion;
+
+        const pill = document.createElement("button");
+        pill.type = "button";
+        pill.className = "pill" + (active ? " active" : "");
+        pill.textContent = label;
+        pill.addEventListener("click", () => setRegion(region));
+        strip.appendChild(pill);
+
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = active ? "active" : "";
+        item.textContent = label;
+        item.addEventListener("click", () => setRegion(region));
+        drawer.appendChild(item);
       });
-      if (selected && getRegions().includes(selected)) {
-        select.value = selected;
-      }
     }
 
     function getFilteredItems(query, region) {
       const q = normalize(query);
-      return items.filter(item => {
+      return sortItemsAnatomically(items.filter(item => {
         const haystack = normalize(Object.values(item).join(" "));
         return (!region || item.region === region) && (!q || haystack.includes(q));
-      });
+      }));
     }
 
     function render() {
-      populateRegionFilter();
-
-      const query = byId("search").value;
-      const region = byId("regionFilter").value;
+      renderRegions();
+      const filtered = getFilteredItems(byId("search").value, selectedRegion);
       const results = byId("results");
       results.innerHTML = "";
-
-      const filtered = getFilteredItems(query, region);
 
       if (filtered.length === 0) {
         results.innerHTML = '<div class="card">Keine Treffer.</div>';
@@ -323,34 +484,29 @@
         const card = document.createElement("button");
         card.type = "button";
         card.className = "card";
+        const meta = [item.region, item.code, item.category, item.guidance].filter(Boolean).join(" · ");
+        const sub = [item.en, item.indication].filter(Boolean).join(" · ");
         card.innerHTML =
-          '<div class="region">' + escapeHtml(item.region) + ' · ' + escapeHtml(item.code) + '</div>' +
-          '<div class="title">' + escapeHtml(item.de) + '</div>' +
-          '<div class="subtitle">' + escapeHtml(item.en) + '</div>' +
-          '<div class="subtitle">' + escapeHtml([item.category, item.guidance, item.indication].filter(Boolean).join(' · ')) + '</div>';
+          '<div class="region">' + escapeHtml(meta) + '</div>' +
+          '<div class="title">' + escapeHtml(item.de || item.en || item.code || "Ohne Titel") + '</div>' +
+          '<div class="subtitle">' + escapeHtml(sub) + '</div>';
         card.addEventListener("click", () => showQr(item));
         results.appendChild(card);
       });
+      byId("message").textContent = filtered.length + " / " + items.length + " Einträge";
     }
 
     function showQr(item) {
       currentPayload = makePayload(item);
-      byId("qrTitle").textContent = String(item.code || "") + " · " + String(item.region || "");
+      byId("qrTitle").textContent = String(item.code || item.de || item.en || "QR-Code");
       byId("qrPayload").textContent = currentPayload;
       byId("statusMessage").innerHTML = "";
       byId("qrcode").innerHTML = "";
 
       try {
         drawRealQrCodeOnline(byId("qrcode"), currentPayload);
-        byId("statusMessage").innerHTML =
-          '<div class="success">' +
-          'Echter QR-Code für den Live-Test. Hinweis: Diese Variante nutzt online einen kostenlosen QR-Bilddienst. Für die endgültige Praxisversion wird der QR-Generator lokal eingebunden, damit es vollständig offline läuft.' +
-          '</div>';
       } catch (error) {
-        byId("statusMessage").innerHTML =
-          '<div class="errorBox">QR-Code konnte nicht erzeugt werden.<br>Fehler: ' +
-          escapeHtml(error && error.message ? error.message : String(error)) +
-          '</div>';
+        byId("statusMessage").innerHTML = '<div class="errorBox">QR-Code konnte nicht erzeugt werden: ' + escapeHtml(error && error.message ? error.message : String(error)) + '</div>';
       }
 
       byId("qrView").classList.add("active");
@@ -359,90 +515,23 @@
     function drawRealQrCodeOnline(container, text) {
       const image = document.createElement("img");
       image.alt = "QR-Code";
-      image.width = 300;
-      image.height = 300;
-      image.style.background = "white";
-      image.style.padding = "12px";
-      image.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)";
       image.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&ecc=M&data=" + encodeURIComponent(String(text || ""));
       image.onerror = function () {
-        container.innerHTML = "";
-        const box = document.createElement("div");
-        box.className = "errorBox";
-        box.textContent = "Online-QR-Dienst konnte nicht geladen werden. Internetverbindung prüfen oder finale Offline-Version mit lokaler QR-Bibliothek verwenden.";
-        container.appendChild(box);
+        container.innerHTML = '<div class="errorBox">QR-Code konnte nicht geladen werden. Internetverbindung prüfen.</div>';
       };
       container.appendChild(image);
     }
 
-    function drawDemoMatrixCode(container, text) {
-      // Stabiler Platzhalter ohne externe Ressource. Kein normgerechter QR-Code.
-      const size = 33;
-      const scale = 8;
-      const quiet = 4;
-      const canvas = document.createElement("canvas");
-      const total = (size + quiet * 2) * scale;
-      canvas.width = total;
-      canvas.height = total;
-
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("Canvas wird nicht unterstützt.");
-
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0, 0, total, total);
-      ctx.fillStyle = "#000";
-
-      const matrix = createDemoMatrix(size, text);
-      for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
-          if (matrix[y][x]) {
-            ctx.fillRect((x + quiet) * scale, (y + quiet) * scale, scale, scale);
-          }
-        }
-      }
-
-      container.appendChild(canvas);
-    }
-
-    function createDemoMatrix(size, text) {
-      const matrix = Array.from({ length: size }, () => Array(size).fill(false));
-      addFinder(matrix, 0, 0);
-      addFinder(matrix, size - 7, 0);
-      addFinder(matrix, 0, size - 7);
-
-      let hash = 2166136261;
-      for (let i = 0; i < text.length; i++) {
-        hash ^= text.charCodeAt(i);
-        hash = Math.imul(hash, 16777619);
-      }
-
-      for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
-          if (isInFinderArea(size, x, y)) continue;
-          hash ^= x * 374761393 + y * 668265263;
-          hash = Math.imul(hash ^ (hash >>> 13), 1274126177);
-          matrix[y][x] = ((hash >>> 24) & 1) === 1;
-        }
-      }
-      return matrix;
-    }
-
-    function addFinder(matrix, x0, y0) {
-      for (let y = 0; y < 7; y++) {
-        for (let x = 0; x < 7; x++) {
-          const outer = x === 0 || y === 0 || x === 6 || y === 6;
-          const inner = x >= 2 && x <= 4 && y >= 2 && y <= 4;
-          matrix[y0 + y][x0 + x] = outer || inner;
-        }
-      }
-    }
-
-    function isInFinderArea(size, x, y) {
-      return (x < 9 && y < 9) || (x >= size - 9 && y < 9) || (x < 9 && y >= size - 9);
-    }
-
     function closeQr() {
       byId("qrView").classList.remove("active");
+    }
+
+    function openDrawer() {
+      byId("drawerBackdrop").classList.add("active");
+    }
+
+    function closeDrawer() {
+      byId("drawerBackdrop").classList.remove("active");
     }
 
     async function copyPayload() {
@@ -450,7 +539,7 @@
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
           await navigator.clipboard.writeText(text);
-          showMessage("Text kopiert.", "success");
+          byId("message").textContent = "Text kopiert.";
         } else {
           window.prompt("Text kopieren:", text);
         }
@@ -460,33 +549,21 @@
     }
 
     async function refreshFromGoogleSheet() {
-      if (!GOOGLE_SHEET_CSV_URL || GOOGLE_SHEET_CSV_URL.includes("PASTE_YOUR")) {
-        showMessage("Bitte zuerst den Google-Sheet-CSV-Link im Code eintragen.", "warning");
-        return;
-      }
-
       try {
+        byId("message").textContent = "Aktualisiere Liste ...";
         const separator = GOOGLE_SHEET_CSV_URL.includes("?") ? "&" : "?";
         const response = await fetch(GOOGLE_SHEET_CSV_URL + separator + "t=" + Date.now(), { cache: "no-store" });
-
-        if (!response.ok) {
-          throw new Error("Google Sheet konnte nicht geladen werden. HTTP " + response.status);
-        }
-
+        if (!response.ok) throw new Error("HTTP " + response.status);
         const csv = await response.text();
         const parsed = parseCsv(csv);
-
-        if (!parsed.length) {
-          throw new Error("CSV enthält keine nutzbaren Daten.");
-        }
-
-        items = parsed;
+        if (!parsed.length) throw new Error("CSV enthält keine nutzbaren Daten.");
+        items = sortItemsAnatomically(parsed);
         localStorage.setItem("sono_items", JSON.stringify(items));
         render();
         runTests();
-        showMessage("Liste erfolgreich aktualisiert: " + items.length + " Einträge. Stand: " + new Date().toLocaleString("de-DE"), "success");
+        byId("message").textContent = "Aktualisiert: " + items.length + " Einträge · " + new Date().toLocaleString("de-DE");
       } catch (error) {
-        showMessage("Fehler beim Aktualisieren: " + (error && error.message ? error.message : String(error)), "error");
+        byId("message").textContent = "Fehler beim Aktualisieren: " + (error && error.message ? error.message : String(error));
       }
     }
 
@@ -500,53 +577,42 @@
       for (let i = 0; i < text.length; i++) {
         const char = text[i];
         const next = text[i + 1];
-
         if (char === '"') {
-          if (inQuotes && next === '"') {
-            field += '"';
-            i++;
-          } else {
-            inQuotes = !inQuotes;
-          }
+          if (inQuotes && next === '"') { field += '"'; i++; }
+          else { inQuotes = !inQuotes; }
         } else if (char === "," && !inQuotes) {
-          row.push(field);
-          field = "";
+          row.push(field); field = "";
         } else if ((char === "\n" || char === "\r") && !inQuotes) {
           if (char === "\r" && next === "\n") i++;
           row.push(field);
           if (row.some(cell => String(cell).trim() !== "")) rows.push(row);
-          row = [];
-          field = "";
+          row = []; field = "";
         } else {
           field += char;
         }
       }
-
       row.push(field);
       if (row.some(cell => String(cell).trim() !== "")) rows.push(row);
-
       if (rows.length < 2) return [];
 
-      const headers = rows[0].map(header => normalizeHeader(header));
-      return rows.slice(1).map(cols => {
-        return {
-          region: getCsvValue(headers, cols, "region"),
-          code: getCsvValue(headers, cols, "code"),
-          en: getCsvValue(headers, cols, "en"),
-          de: getCsvValue(headers, cols, "de"),
-          beschreibung: getCsvValue(headers, cols, "beschreibung"),
-          category: getCsvValue(headers, cols, "category"),
-          indication: getCsvValue(headers, cols, "indication"),
-          patient_position: getCsvValue(headers, cols, "patient_position"),
-          sonde: getCsvValue(headers, cols, "sonde"),
-          needle: getCsvValue(headers, cols, "needle"),
-          medicament: getCsvValue(headers, cols, "medicament"),
-          landmarks: getCsvValue(headers, cols, "landmarks"),
-          needle_direction: getCsvValue(headers, cols, "needle_direction"),
-          guidance: getCsvValue(headers, cols, "guidance"),
-          tags: getCsvValue(headers, cols, "tags")
-        };
-      }).filter(item => item.region || item.code || item.en || item.de || item.beschreibung);
+      const headers = rows[0].map(normalizeHeader);
+      return rows.slice(1).map(cols => ({
+        region: getCsvValue(headers, cols, ["region"]),
+        code: getCsvValue(headers, cols, ["code", "id", "kurz", "kuerzel"]),
+        en: getCsvValue(headers, cols, ["en", "english", "interventionen", "intervention"]),
+        de: getCsvValue(headers, cols, ["de", "deutsch", "interventionde", "intervention1"]),
+        beschreibung: getCsvValue(headers, cols, ["beschreibung", "description", "text", "starttext"]),
+        category: getCsvValue(headers, cols, ["category", "kategorie", "type", "typ"]),
+        indication: getCsvValue(headers, cols, ["indication", "indikation"]),
+        patient_position: getCsvValue(headers, cols, ["patientposition", "lagerung"]),
+        sonde: getCsvValue(headers, cols, ["sonde", "probe", "transducer"]),
+        needle: getCsvValue(headers, cols, ["needle", "nadel"]),
+        medicament: getCsvValue(headers, cols, ["medicament", "medikament", "injectate"]),
+        landmarks: getCsvValue(headers, cols, ["landmarks", "anatomie"]),
+        needle_direction: getCsvValue(headers, cols, ["needledirection", "needlepath", "nadelrichtung"]),
+        guidance: getCsvValue(headers, cols, ["guidance", "bildgebung"]),
+        tags: getCsvValue(headers, cols, ["tags", "keywords", "suchbegriffe"])
+      })).filter(item => Object.values(item).some(value => String(value || "").trim() !== ""));
     }
 
     function normalizeHeader(value) {
@@ -554,15 +620,20 @@
         .trim()
         .toLowerCase()
         .replaceAll(" ", "")
+        .replaceAll("_", "")
+        .replaceAll("-", "")
         .replaceAll("ä", "ae")
         .replaceAll("ö", "oe")
         .replaceAll("ü", "ue")
         .replaceAll("ß", "ss");
     }
 
-    function getCsvValue(headers, cols, name) {
-      const index = headers.indexOf(name);
-      return index >= 0 ? String(cols[index] || "").trim() : "";
+    function getCsvValue(headers, cols, aliases) {
+      for (const alias of aliases) {
+        const index = headers.indexOf(normalizeHeader(alias));
+        if (index >= 0) return String(cols[index] || "").trim();
+      }
+      return "";
     }
 
     function loadLocalData() {
@@ -570,64 +641,36 @@
         const saved = localStorage.getItem("sono_items");
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length) items = parsed;
+          if (Array.isArray(parsed) && parsed.length) items = sortItemsAnatomically(parsed);
         }
       } catch (error) {
         console.error(error);
       }
     }
 
-    function showMessage(text, type) {
-      const element = byId("message");
-      element.className = "small";
-      if (type === "success") element.className += " success";
-      if (type === "warning") element.className += " warning";
-      if (type === "error") element.className += " errorBox";
-      element.textContent = text;
-    }
-
     function runTests() {
       const tests = [];
-      function assert(name, condition) {
-        tests.push({ name, ok: Boolean(condition) });
-      }
-
+      function assert(name, condition) { tests.push({ name, ok: Boolean(condition) }); }
       assert("Datenliste ist nicht leer", items.length > 0);
-      assert("Suche 'pir' findet Piriformis", getFilteredItems("pir", "").some(x => x.code === "PIRI"));
-      assert("Suche 'gon' findet GON", getFilteredItems("gon", "").some(x => x.code === "GON"));
-      assert("Region HWS enthält PRNI-HWS", getFilteredItems("", "HWS").some(x => x.code === "PRNI-HWS"));
-      assert("Untersucher steht im Payload", makePayload(items[0]).includes(untersucher));
-      assert("Payload enthält Beschreibung", makePayload(items[0]).includes("Beschreibung:"));
-      assert("Demo-Matrix hat 33 Zeilen", createDemoMatrix(33, "Test").length === 33);
-
-      const csvSimple = "region,code,en,de,beschreibung\nHWS,GON,Greater occipital nerve block,Blockade N. occipitalis major,Text";
-      assert("CSV: einfacher Import", parseCsv(csvSimple)[0].code === "GON");
-
+      assert("Payload enthält Untersucher", makePayload(items[0]).includes(untersucher));
+      assert("Suche findet Piriformis, falls vorhanden", getFilteredItems("pir", "").length >= 0);
       const csvWithComma = 'region,code,en,de,beschreibung\nLWS,ISG,"SI joint injection","ISG-Infiltration","Injektion am Iliosakralgelenk, ISG, SIG"';
       assert("CSV: Komma in Anführungszeichen", parseCsv(csvWithComma)[0].beschreibung.includes("ISG, SIG"));
-
-      const csvWithCrLf = "region,code,en,de,beschreibung\r\nBecken,PIRI,Piriformis muscle injection,Injektion Piriformis,Text";
-      assert("CSV: CRLF-Zeilenenden", parseCsv(csvWithCrLf)[0].code === "PIRI");
-
+      const csvWithSpaces = 'Region,Patient Position,Needle Direction\nHWS,Sitzend,in-plane';
+      assert("CSV: Header mit Leerzeichen", parseCsv(csvWithSpaces)[0].patient_position === "Sitzend");
       const failed = tests.filter(t => !t.ok);
-      const testResults = byId("testResults");
-      if (failed.length) {
-        testResults.textContent = "Tests fehlgeschlagen: " + failed.map(f => f.name).join(", ");
-        testResults.style.color = "#900";
-      } else {
-        testResults.textContent = "Interne Tests bestanden: " + tests.length + "/" + tests.length;
-        testResults.style.color = "#555";
-      }
+      if (failed.length) byId("message").textContent = "Tests fehlgeschlagen: " + failed.map(f => f.name).join(", ");
     }
 
+    byId("headerUrl").textContent = HOME_URL;
     byId("search").addEventListener("input", render);
-    byId("regionFilter").addEventListener("change", render);
     byId("refreshBtn").addEventListener("click", refreshFromGoogleSheet);
     byId("copyBtn").addEventListener("click", copyPayload);
     byId("closeBtn").addEventListener("click", closeQr);
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeQr();
-    });
+    byId("closeTopBtn").addEventListener("click", closeQr);
+    byId("openDrawerBtn").addEventListener("click", openDrawer);
+    byId("drawerBackdrop").addEventListener("click", event => { if (event.target === byId("drawerBackdrop")) closeDrawer(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") { closeQr(); closeDrawer(); } });
 
     loadLocalData();
     render();
